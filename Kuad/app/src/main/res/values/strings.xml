@@ -3,4 +3,10 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="app_des">Welcome to Kuad. Let\'s catch a bottle from someone and read their message.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_des">Wanna join us ?</string>
 </resources>
