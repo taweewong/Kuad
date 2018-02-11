@@ -51,4 +51,8 @@ object FirebaseAuthService {
                     }
                 })
     }
+
+    fun isUserSignedIn(): Boolean {
+        return FirebaseAuth.getInstance().currentUser != null
+    }
 }
