@@ -15,7 +15,7 @@ object FirebaseDatabaseService {
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val usersRef = firebaseDatabase.getReference(CHILD_USERS)
 
-    fun createNewUser(user: User, listener: OnUpdateUserComplete) {
+    fun updateUser(user: User, listener: OnUpdateUserComplete) {
         usersRef.child(user.id).setValue(user).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 listener.onUpdateUserSuccess(user)
