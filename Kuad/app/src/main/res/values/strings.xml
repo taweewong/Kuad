@@ -8,7 +8,7 @@
     <string name="login">Login</string>
     <string name="app_des">Welcome to Kuad. Let\'s catch a bottle from someone and read their message.</string>
     <string name="sign_up">Sign Up</string>
-    <string name="sign_up_des">Wanna join us ?</string>
+    <string name="sign_up_des">Want to join us ?</string>
     <string name="register_title">Register</string>
     <string name="first_name">First name</string>
     <string name="first_name_hint">First Name</string>
@@ -17,4 +17,5 @@
     <string name="email">Email</string>
     <string name="email_hint">Email</string>
     <string name="confirm">Confirm</string>
+    <string name="password">Password</string>
 </resources>
