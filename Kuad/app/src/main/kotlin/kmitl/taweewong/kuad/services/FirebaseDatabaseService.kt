@@ -1,6 +1,9 @@
 package kmitl.taweewong.kuad.services
 
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kmitl.taweewong.kuad.models.Bottle
 import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
@@ -22,6 +25,11 @@ object FirebaseDatabaseService {
     interface OnAddMessageComplete {
         fun onAddMessageSuccess(message: Message)
         fun onAddMessageFailed(message: String)
+    }
+
+    interface OnGetBottleComplete {
+        fun onGetBottleSuccess(bottle: Bottle)
+        fun onGetBottleFailed(message: String)
     }
 
     private const val CHILD_USERS = "users"
@@ -77,5 +85,17 @@ object FirebaseDatabaseService {
                 }
             }
         }
+    }
+
+    fun getBottle(bottleId: String, listener: OnGetBottleComplete) {
+        dataRef.child(CHILD_BOTTLES).child(bottleId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                listener.onGetBottleSuccess(dataSnapshot.getValue(Bottle::class.java)?: Bottle())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                listener.onGetBottleFailed(databaseError.message)
+            }
+        })
     }
 }
