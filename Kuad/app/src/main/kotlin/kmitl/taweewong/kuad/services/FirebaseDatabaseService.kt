@@ -2,7 +2,10 @@ package kmitl.taweewong.kuad.services
 
 import com.google.firebase.database.FirebaseDatabase
 import kmitl.taweewong.kuad.models.Bottle
+import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
+import java.text.SimpleDateFormat
+import java.util.*
 
 object FirebaseDatabaseService {
 
@@ -16,13 +19,19 @@ object FirebaseDatabaseService {
         fun onCreateBottleFailed(message: String)
     }
 
+    interface OnAddMessageComplete {
+        fun onAddMessageSuccess(message: Message)
+        fun onAddMessageFailed(message: String)
+    }
+
     private const val CHILD_USERS = "users"
     private const val CHILD_BOTTLES = "bottles"
+    private const val CHILD_MESSAGES = "messages"
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val dataRef = firebaseDatabase.reference
 
-    private fun generateBottleId(): String {
+    private fun generateId(): String {
         return dataRef.push().key
     }
 
@@ -39,7 +48,7 @@ object FirebaseDatabaseService {
     }
 
     fun createBottle(ownerId: String, bottleTitle: String, listener: OnCreateBottleComplete) {
-        val bottleId = generateBottleId()
+        val bottleId = generateId()
         val newBottle = Bottle(bottleId, bottleTitle, ownerId)
 
         dataRef.child(CHILD_BOTTLES).child(bottleId).setValue(newBottle).addOnCompleteListener { task ->
@@ -48,6 +57,23 @@ object FirebaseDatabaseService {
             } else {
                 task.addOnFailureListener { exception ->
                     listener.onCreateBottleFailed(exception.message?: "No error message")
+                }
+            }
+        }
+    }
+
+    fun addMessageToBottle(bottleId: String, message: String, listener: OnAddMessageComplete) {
+        val messageId = generateId()
+        val date = SimpleDateFormat("dd-MMM-YYYY", Locale.US).format(Date())
+        val newMessage = Message(messageId, date, message, "Bangkok, Thailand")
+
+        dataRef.child(CHILD_BOTTLES).child(bottleId).child(CHILD_MESSAGES).child(messageId)
+                .setValue(newMessage).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                listener.onAddMessageSuccess(newMessage)
+            } else {
+                task.addOnFailureListener { exception ->
+                    listener.onAddMessageFailed(exception.message?: "No error message")
                 }
             }
         }
