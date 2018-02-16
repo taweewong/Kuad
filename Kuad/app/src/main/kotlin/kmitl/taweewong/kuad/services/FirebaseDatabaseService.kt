@@ -20,15 +20,14 @@ object FirebaseDatabaseService {
     private const val CHILD_BOTTLES = "bottles"
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
-    private val usersRef = firebaseDatabase.getReference(CHILD_USERS)
-    private val bottlesRef = firebaseDatabase.getReference(CHILD_BOTTLES)
+    private val dataRef = firebaseDatabase.reference
 
     private fun generateBottleId(): String {
-        return bottlesRef.push().key
+        return dataRef.push().key
     }
 
     fun updateUser(user: User, listener: OnUpdateUserComplete) {
-        usersRef.child(user.id).setValue(user).addOnCompleteListener { task ->
+        dataRef.child(CHILD_USERS).child(user.id).setValue(user).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 listener.onUpdateUserSuccess(user)
             } else {
@@ -43,7 +42,7 @@ object FirebaseDatabaseService {
         val bottleId = generateBottleId()
         val newBottle = Bottle(bottleId, bottleTitle, ownerId)
 
-        bottlesRef.child(bottleId).setValue(newBottle).addOnCompleteListener { task ->
+        dataRef.child(CHILD_BOTTLES).child(bottleId).setValue(newBottle).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 listener.onCreateBottleSuccess(newBottle)
             } else {
