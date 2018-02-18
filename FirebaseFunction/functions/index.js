@@ -8,7 +8,7 @@ exports.helloKuad = functions.https.onRequest((request, response) => {
 });
 
 exports.randomBottle = functions.https.onRequest((request, response) => {
-    ref.child('bottles').orderByChild('hasOwner').equalTo(false).once('value')
+    ref.child('bottles').orderByChild('isHolding').equalTo(false).once('value')
     .then(snap => {
         response.send(snap)
         return snap
