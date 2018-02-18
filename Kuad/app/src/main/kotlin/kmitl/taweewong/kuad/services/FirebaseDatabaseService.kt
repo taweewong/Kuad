@@ -9,6 +9,7 @@ import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 object FirebaseDatabaseService {
 
@@ -32,9 +33,15 @@ object FirebaseDatabaseService {
         fun onGetBottleFailed(message: String)
     }
 
+    interface OnGetUserBottlesComplete {
+        fun onGetUserBottlesSuccess(bottles: ArrayList<Bottle>)
+        fun onGetUserBottlesFailed(message: String)
+    }
+
     private const val CHILD_USERS = "users"
     private const val CHILD_BOTTLES = "bottles"
     private const val CHILD_MESSAGES = "messages"
+    private const val CHILD_OWNER = "owner"
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val dataRef = firebaseDatabase.reference
@@ -97,5 +104,23 @@ object FirebaseDatabaseService {
                 listener.onGetBottleFailed(databaseError.message)
             }
         })
+    }
+
+    fun getUserBottles(userId: String, listener: OnGetUserBottlesComplete) {
+        dataRef.child(CHILD_BOTTLES)
+                .orderByChild(CHILD_OWNER)
+                .equalTo(userId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val bottles = ArrayList<Bottle>()
+
+                        dataSnapshot.children.mapNotNullTo(bottles) { it.getValue(Bottle::class.java) }
+                        listener.onGetUserBottlesSuccess(bottles)
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        listener.onGetUserBottlesFailed(databaseError.message)
+                    }
+                })
     }
 }
