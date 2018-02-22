@@ -13,6 +13,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         supportActionBar?.hide()
 
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+
         signUpButton.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
