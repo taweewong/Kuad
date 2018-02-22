@@ -18,4 +18,6 @@
     <string name="email_hint">Email</string>
     <string name="confirm">Confirm</string>
     <string name="password">Password</string>
+    <string name="catch_a_bottle">Catch\nA\nBottle</string>
+    <string name="my_bottle">My Bottle</string>
 </resources>
