@@ -1,6 +1,8 @@
 package kmitl.taweewong.kuad.services
 
 import com.google.firebase.auth.FirebaseAuth
+import kmitl.taweewong.kuad.descriptions.ErrorMessage.NO_ERROR_MESSAGE
+import kmitl.taweewong.kuad.descriptions.ErrorMessage.USER_NOT_EXIST_ERROR_MESSAGE
 
 object FirebaseAuthService {
 
@@ -24,11 +26,11 @@ object FirebaseAuthService {
                         if (user != null) {
                             listener.onRegisterSuccess(user.uid)
                         } else {
-                            listener.onRegisterFailed("User's not exist")
+                            listener.onRegisterFailed(USER_NOT_EXIST_ERROR_MESSAGE)
                         }
                     } else {
                         task.addOnFailureListener { exception ->
-                            listener.onRegisterFailed(exception.message ?: "No error message")
+                            listener.onRegisterFailed(exception.message ?: NO_ERROR_MESSAGE)
                         }
                     }
                 })
@@ -42,11 +44,11 @@ object FirebaseAuthService {
                         if (user != null) {
                             listener.onSignInSuccess(user.uid)
                         } else {
-                            listener.onSignInFailed("User's not exist")
+                            listener.onSignInFailed(USER_NOT_EXIST_ERROR_MESSAGE)
                         }
                     } else {
                         task.addOnFailureListener { exception ->
-                            listener.onSignInFailed(exception.message ?: "No error message")
+                            listener.onSignInFailed(exception.message ?: NO_ERROR_MESSAGE)
                         }
                     }
                 })

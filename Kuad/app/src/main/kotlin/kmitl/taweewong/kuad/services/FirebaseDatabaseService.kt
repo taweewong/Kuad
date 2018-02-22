@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kmitl.taweewong.kuad.descriptions.ErrorMessage.NO_ERROR_MESSAGE
 import kmitl.taweewong.kuad.models.Bottle
 import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
@@ -56,7 +57,7 @@ object FirebaseDatabaseService {
                 listener.onUpdateUserSuccess(user)
             } else {
                 task.addOnFailureListener { exception ->
-                    listener.onUpdateUserFailed(exception.message?: "No error message")
+                    listener.onUpdateUserFailed(exception.message?: NO_ERROR_MESSAGE)
                 }
             }
         }
@@ -71,7 +72,7 @@ object FirebaseDatabaseService {
                 listener.onCreateBottleSuccess(newBottle)
             } else {
                 task.addOnFailureListener { exception ->
-                    listener.onCreateBottleFailed(exception.message?: "No error message")
+                    listener.onCreateBottleFailed(exception.message?: NO_ERROR_MESSAGE)
                 }
             }
         }
@@ -88,7 +89,7 @@ object FirebaseDatabaseService {
                 listener.onAddMessageSuccess(newMessage)
             } else {
                 task.addOnFailureListener { exception ->
-                    listener.onAddMessageFailed(exception.message?: "No error message")
+                    listener.onAddMessageFailed(exception.message?: NO_ERROR_MESSAGE)
                 }
             }
         }
