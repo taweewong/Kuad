@@ -52,7 +52,9 @@ object FirebaseAuthService {
                 })
     }
 
-    fun isUserSignedIn(): Boolean {
-        return FirebaseAuth.getInstance().currentUser != null
+    fun getCurrentUserId(): String? {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        return currentUser?.uid
     }
 }
