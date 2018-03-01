@@ -3,4 +3,7 @@
     <dimen name="default_margin_top">30dp</dimen>
     <dimen name="default_font_size">20sp</dimen>
     <dimen name="button_font_size">20sp</dimen>
+    <dimen name="title_font_size">24sp</dimen>
+    <dimen name="message_font_size">18sp</dimen>
+    <dimen name="small_message_font_size">16sp</dimen>
 </resources>
