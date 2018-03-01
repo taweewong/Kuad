@@ -8,6 +8,7 @@
     tools:context="kmitl.taweewong.kuad.activities.MainActivity">
 
     <Button
+        android:id="@+id/catchBottleButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
         android:layout_marginBottom="8dp"
