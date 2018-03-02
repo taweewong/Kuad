@@ -45,6 +45,11 @@ object FirebaseDatabaseService {
         fun onAddFollowingBottleFailed(message: String)
     }
 
+    interface OnGetFollowingBottleComplete {
+        fun onGetFollowingBottleSuccess(followingBottles: ArrayList<FollowingBottle>)
+        fun onGetFollowingBottleFailed(message: String)
+    }
+
     private const val CHILD_USERS = "users"
     private const val CHILD_BOTTLES = "bottles"
     private const val CHILD_MESSAGES = "messages"
@@ -162,5 +167,23 @@ object FirebaseDatabaseService {
                         }
                     }
                 }
+    }
+
+    fun getFollowingBottle(userId: String, listener: OnGetFollowingBottleComplete) {
+        dataRef.child(CHILD_USERS)
+                .child(userId)
+                .child(CHILD_FOLLOWING_BOTTLES)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val followingBottles = ArrayList<FollowingBottle>()
+
+                        dataSnapshot.children.mapNotNullTo(followingBottles) { it.getValue(FollowingBottle::class.java) }
+                        listener.onGetFollowingBottleSuccess(followingBottles)
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        listener.onGetFollowingBottleFailed(databaseError.message)
+                    }
+                })
     }
 }
