@@ -50,11 +50,17 @@ object FirebaseDatabaseService {
         fun onGetFollowingBottleFailed(message: String)
     }
 
+    interface OnAddHistoryBottleComplete {
+        fun onAddHistoryBottleSuccess(historyBottle: BottleReference)
+        fun onAddHistoryBottleFailed(message: String)
+    }
+
     private const val CHILD_USERS = "users"
     private const val CHILD_BOTTLES = "bottles"
     private const val CHILD_MESSAGES = "messages"
     private const val CHILD_OWNER = "owner"
     private const val CHILD_FOLLOWING_BOTTLES = "followingBottles"
+    private const val CHILD_HISTORY_BOTTLES = "historyBottles"
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val dataRef = firebaseDatabase.reference
@@ -185,5 +191,25 @@ object FirebaseDatabaseService {
                         listener.onGetFollowingBottleFailed(databaseError.message)
                     }
                 })
+    }
+
+    fun addHistoryBottle(userId: String, historyBottleId: String, historyBottleTitle: String, listener: OnAddHistoryBottleComplete) {
+        val historyBottleChildId = generateId()
+        val historyBottle = BottleReference(historyBottleChildId, historyBottleId, historyBottleTitle)
+
+        dataRef.child(CHILD_USERS)
+                .child(userId)
+                .child(CHILD_HISTORY_BOTTLES)
+                .child(historyBottleChildId)
+                .setValue(historyBottle)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        listener.onAddHistoryBottleSuccess(historyBottle)
+                    } else {
+                        task.addOnFailureListener { exception ->
+                            listener.onAddHistoryBottleFailed(exception.message?: NO_ERROR_MESSAGE)
+                        }
+                    }
+                }
     }
 }
