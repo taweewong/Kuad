@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kmitl.taweewong.kuad.descriptions.ErrorMessage.NO_ERROR_MESSAGE
 import kmitl.taweewong.kuad.models.Bottle
-import kmitl.taweewong.kuad.models.FollowingBottle
+import kmitl.taweewong.kuad.models.BottleReference
 import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
 import java.text.SimpleDateFormat
@@ -41,12 +41,12 @@ object FirebaseDatabaseService {
     }
 
     interface OnAddFollowingBottleComplete {
-        fun onAddFollowingBottleSuccess(followingBottle: FollowingBottle)
+        fun onAddFollowingBottleSuccess(followingBottle: BottleReference)
         fun onAddFollowingBottleFailed(message: String)
     }
 
     interface OnGetFollowingBottleComplete {
-        fun onGetFollowingBottleSuccess(followingBottles: ArrayList<FollowingBottle>)
+        fun onGetFollowingBottleSuccess(followingBottles: ArrayList<BottleReference>)
         fun onGetFollowingBottleFailed(message: String)
     }
 
@@ -151,7 +151,7 @@ object FirebaseDatabaseService {
 
     fun addFollowingBottle(userId: String, followingBottleId: String, followingBottleTitle: String, listener: OnAddFollowingBottleComplete) {
         val followingBottleChildId = generateId()
-        val followingBottle = FollowingBottle(followingBottleChildId, followingBottleId, followingBottleTitle)
+        val followingBottle = BottleReference(followingBottleChildId, followingBottleId, followingBottleTitle)
 
         dataRef.child(CHILD_USERS)
                 .child(userId)
@@ -175,9 +175,9 @@ object FirebaseDatabaseService {
                 .child(CHILD_FOLLOWING_BOTTLES)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val followingBottles = ArrayList<FollowingBottle>()
+                        val followingBottles = ArrayList<BottleReference>()
 
-                        dataSnapshot.children.mapNotNullTo(followingBottles) { it.getValue(FollowingBottle::class.java) }
+                        dataSnapshot.children.mapNotNullTo(followingBottles) { it.getValue(BottleReference::class.java) }
                         listener.onGetFollowingBottleSuccess(followingBottles)
                     }
 
