@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kmitl.taweewong.kuad.descriptions.ErrorMessage.NO_ERROR_MESSAGE
 import kmitl.taweewong.kuad.models.Bottle
-import kmitl.taweewong.kuad.models.FollowingBottle
+import kmitl.taweewong.kuad.models.BottleReference
 import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
 import java.text.SimpleDateFormat
@@ -41,13 +41,23 @@ object FirebaseDatabaseService {
     }
 
     interface OnAddFollowingBottleComplete {
-        fun onAddFollowingBottleSuccess(followingBottle: FollowingBottle)
+        fun onAddFollowingBottleSuccess(followingBottle: BottleReference)
         fun onAddFollowingBottleFailed(message: String)
     }
 
     interface OnGetFollowingBottleComplete {
-        fun onGetFollowingBottleSuccess(followingBottles: ArrayList<FollowingBottle>)
+        fun onGetFollowingBottleSuccess(followingBottles: ArrayList<BottleReference>)
         fun onGetFollowingBottleFailed(message: String)
+    }
+
+    interface OnAddHistoryBottleComplete {
+        fun onAddHistoryBottleSuccess(historyBottle: BottleReference)
+        fun onAddHistoryBottleFailed(message: String)
+    }
+
+    interface OnGetHistoryBottleComplete {
+        fun onGetHistoryBottleSuccess(historyBottles: ArrayList<BottleReference>)
+        fun onGetHistoryBottleFailed(message: String)
     }
 
     private const val CHILD_USERS = "users"
@@ -55,6 +65,7 @@ object FirebaseDatabaseService {
     private const val CHILD_MESSAGES = "messages"
     private const val CHILD_OWNER = "owner"
     private const val CHILD_FOLLOWING_BOTTLES = "followingBottles"
+    private const val CHILD_HISTORY_BOTTLES = "historyBottles"
 
     private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val dataRef = firebaseDatabase.reference
@@ -151,7 +162,7 @@ object FirebaseDatabaseService {
 
     fun addFollowingBottle(userId: String, followingBottleId: String, followingBottleTitle: String, listener: OnAddFollowingBottleComplete) {
         val followingBottleChildId = generateId()
-        val followingBottle = FollowingBottle(followingBottleChildId, followingBottleId, followingBottleTitle)
+        val followingBottle = BottleReference(followingBottleChildId, followingBottleId, followingBottleTitle)
 
         dataRef.child(CHILD_USERS)
                 .child(userId)
@@ -175,14 +186,52 @@ object FirebaseDatabaseService {
                 .child(CHILD_FOLLOWING_BOTTLES)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val followingBottles = ArrayList<FollowingBottle>()
+                        val followingBottles = ArrayList<BottleReference>()
 
-                        dataSnapshot.children.mapNotNullTo(followingBottles) { it.getValue(FollowingBottle::class.java) }
+                        dataSnapshot.children.mapNotNullTo(followingBottles) { it.getValue(BottleReference::class.java) }
                         listener.onGetFollowingBottleSuccess(followingBottles)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
                         listener.onGetFollowingBottleFailed(databaseError.message)
+                    }
+                })
+    }
+
+    fun addHistoryBottle(userId: String, historyBottleId: String, historyBottleTitle: String, listener: OnAddHistoryBottleComplete) {
+        val historyBottleChildId = generateId()
+        val historyBottle = BottleReference(historyBottleChildId, historyBottleId, historyBottleTitle)
+
+        dataRef.child(CHILD_USERS)
+                .child(userId)
+                .child(CHILD_HISTORY_BOTTLES)
+                .child(historyBottleChildId)
+                .setValue(historyBottle)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        listener.onAddHistoryBottleSuccess(historyBottle)
+                    } else {
+                        task.addOnFailureListener { exception ->
+                            listener.onAddHistoryBottleFailed(exception.message?: NO_ERROR_MESSAGE)
+                        }
+                    }
+                }
+    }
+
+    fun getHistoryBottle(userId: String, listener: OnGetHistoryBottleComplete) {
+        dataRef.child(CHILD_USERS)
+                .child(userId)
+                .child(CHILD_HISTORY_BOTTLES)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val historyBottles = ArrayList<BottleReference>()
+
+                        dataSnapshot.children.mapNotNullTo(historyBottles) { it.getValue(BottleReference::class.java) }
+                        listener.onGetHistoryBottleSuccess(historyBottles)
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        listener.onGetHistoryBottleFailed(databaseError.message)
                     }
                 })
     }
