@@ -9,9 +9,7 @@ import kmitl.taweewong.kuad.models.Bottle
 import kmitl.taweewong.kuad.models.BottleReference
 import kmitl.taweewong.kuad.models.Message
 import kmitl.taweewong.kuad.models.User
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import kmitl.taweewong.kuad.utilities.DateUtil
 
 object FirebaseDatabaseService {
 
@@ -91,7 +89,8 @@ object FirebaseDatabaseService {
 
     fun createBottle(ownerId: String, bottleTitle: String, listener: OnCreateBottleComplete) {
         val bottleId = generateId()
-        val newBottle = Bottle(bottleId, bottleTitle, ownerId)
+        val date = DateUtil.getTodayDateString()
+        val newBottle = Bottle(bottleId, bottleTitle, ownerId, date)
 
         dataRef.child(CHILD_BOTTLES)
                 .child(bottleId)
@@ -109,7 +108,7 @@ object FirebaseDatabaseService {
 
     fun addMessageToBottle(bottleId: String, message: String, listener: OnAddMessageComplete) {
         val messageId = generateId()
-        val date = SimpleDateFormat("dd-MMM-YYYY", Locale.US).format(Date())
+        val date = DateUtil.getTodayDateString()
         val newMessage = Message(messageId, date, message, "Bangkok, Thailand")
 
         dataRef.child(CHILD_BOTTLES)

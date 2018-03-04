@@ -20,4 +20,5 @@
     <string name="password">Password</string>
     <string name="catch_a_bottle">Catch\nA\nBottle</string>
     <string name="my_bottle">My Bottle</string>
+    <string name="my_bottles_title">My Bottles</string>
 </resources>
