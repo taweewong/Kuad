@@ -21,4 +21,6 @@
     <string name="catch_a_bottle">Catch\nA\nBottle</string>
     <string name="my_bottle">My Bottle</string>
     <string name="my_bottles_title">My Bottles</string>
+    <string name="following_bottles">Following Bottles</string>
+    <string name="history_bottles">History Bottles</string>
 </resources>
