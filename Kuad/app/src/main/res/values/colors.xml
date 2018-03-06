@@ -6,4 +6,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="gray">#ababab</color>
     <color name="TransGray">#c3ffffff</color>
+    <color name="transBlue">#c35db6f2</color>
 </resources>
