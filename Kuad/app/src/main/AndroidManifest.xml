@@ -24,7 +24,8 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.BottleActivity" />
-        <activity android:name=".activities.MyBottleActivity"></activity>
+        <activity android:name=".activities.MyBottleActivity" />
+        <activity android:name=".activities.OtherBottleActivity" />
     </application>
 
 </manifest>
