@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import kmitl.taweewong.kuad.R
+import kmitl.taweewong.kuad.descriptions.ErrorMessage.EMPTY_EMAIL_PASSWORD_ERROR_MESSAGE
 import kmitl.taweewong.kuad.descriptions.KeyName.USER_ID_EXTRA_NAME
 import kmitl.taweewong.kuad.services.FirebaseAuthService
 import kmitl.taweewong.kuad.services.FirebaseAuthService.OnSignInComplete
@@ -38,7 +39,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.loginButton -> login()
-            R.id.signUpButton -> startActivity(RegisterActivity())
+            R.id.signUpButton -> startRegisterActivity()
         }
     }
 
@@ -46,20 +47,23 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         val email = emailLoginEditText.text.toString()
         val password = passwordLoginEditText.text.toString()
 
-        FirebaseAuthService.signInWithEmail(email, password, object : OnSignInComplete {
-            override fun onSignInSuccess(uid: String) {
-                startMainActivity(uid)
-            }
+        if (email.isEmpty() or password.isEmpty()) {
+            Toast.makeText(this, EMPTY_EMAIL_PASSWORD_ERROR_MESSAGE, Toast.LENGTH_LONG).show()
+        } else {
+            FirebaseAuthService.signInWithEmail(email, password, object : OnSignInComplete {
+                override fun onSignInSuccess(uid: String) {
+                    startMainActivity(uid)
+                }
 
-            override fun onSignInFailed(message: String) {
-                Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onSignInFailed(message: String) {
+                    Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
+                }
+            })
+        }
     }
 
-    private fun startActivity(activity: AppCompatActivity) {
-        startActivity(Intent(this@LoginActivity, activity::class.java))
-        finish()
+    private fun startRegisterActivity() {
+        startActivity(Intent(this@LoginActivity, RegisterActivity()::class.java))
     }
 
     private fun startMainActivity(uid: String) {
