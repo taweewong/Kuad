@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (view.id) {
             R.id.catchBottleButton -> {
                 startActivity(Intent(this, BottleActivity::class.java))
-                finish()
             }
         }
     }
