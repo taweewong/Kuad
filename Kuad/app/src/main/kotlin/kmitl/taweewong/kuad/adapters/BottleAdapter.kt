@@ -29,8 +29,8 @@ class BottleAdapter(private val bottleMessageItems: ArrayList<BottleMessageItem>
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent?.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
 
         return if (viewType == TITLE) {
             val itemView = inflater.inflate(R.layout.bottle_title_layout, parent, false)
@@ -41,7 +41,7 @@ class BottleAdapter(private val bottleMessageItems: ArrayList<BottleMessageItem>
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
 
         if (viewType == TITLE) {

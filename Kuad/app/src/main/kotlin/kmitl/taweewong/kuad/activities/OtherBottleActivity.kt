@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kmitl.taweewong.kuad.R
 import kmitl.taweewong.kuad.activities.OtherBottleActivity.BottleMenu.FOLLOWING
-import kmitl.taweewong.kuad.activities.OtherBottleActivity.BottleMenuExtraKey.BOTTLE_MENU_EXTRA_KEY
+import kmitl.taweewong.kuad.descriptions.KeyName.BOTTLE_MENU_EXTRA_NAME
 import kotlinx.android.synthetic.main.activity_other_bottle.*
 
 class OtherBottleActivity : AppCompatActivity() {
@@ -12,10 +12,6 @@ class OtherBottleActivity : AppCompatActivity() {
 
     enum class BottleMenu {
         FOLLOWING, HISTORY
-    }
-
-    object BottleMenuExtraKey {
-        const val BOTTLE_MENU_EXTRA_KEY = "bottleMenu"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +29,6 @@ class OtherBottleActivity : AppCompatActivity() {
     }
 
     private fun collectData() {
-        menu = BottleMenu.valueOf(intent.getStringExtra(BOTTLE_MENU_EXTRA_KEY))
+        menu = BottleMenu.valueOf(intent.getStringExtra(BOTTLE_MENU_EXTRA_NAME))
     }
 }
